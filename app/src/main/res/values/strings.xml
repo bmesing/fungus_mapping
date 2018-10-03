@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Pilzkartierung</string>
+    <string name="fungus_name_latin">Pilzname (lateinisch)</string>
+</resources>
