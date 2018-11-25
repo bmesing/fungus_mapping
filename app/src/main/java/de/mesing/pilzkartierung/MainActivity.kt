@@ -3,19 +3,21 @@ package de.mesing.pilzkartierung
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.MapView
-import android.preference.PreferenceManager
-import android.view.View
+import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import de.mesing.pilzkartierung.domain.FungusNameSearch
+import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.api.IMapController
-
-
+import org.osmdroid.views.MapView
+import java.io.InputStreamReader
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,9 +28,29 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var map: MapView
 
+     class SearchTextChangedWatcher : TextWatcher {
+         override fun afterTextChanged(s: Editable?) {
+
+         }
+
+         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+         }
+
+         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+             for (entry in FungusNameSearch.findBySearchString(s.toString()))
+                  Log.d("TAG", entry)
+         }
+
+     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // TODO: in background
+        val inputStream = resources.openRawResource(R.raw.mushroom_names)
+
+        FungusNameSearch.loadNameList(InputStreamReader(inputStream))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,  Manifest.permission.WRITE_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED) {
@@ -52,6 +74,8 @@ class MainActivity : AppCompatActivity() {
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
+
+        fungus_input.addTextChangedListener(SearchTextChangedWatcher())
 
         val mapController = map.controller
         mapController.setZoom(12.0)

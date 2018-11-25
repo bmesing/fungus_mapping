@@ -2,6 +2,7 @@ package de.mesing.pilzkartierung.domain
 
 import de.mesing.pilzkartierung.util.StringUtils
 import org.apache.commons.csv.CSVFormat
+import java.io.Reader
 import java.io.StringReader
 
 
@@ -40,8 +41,11 @@ object FungusNameSearch {
 
     fun loadNameList(input: String) {
         fungi.clear()
-        val inputReader = StringReader(input)
-        val records = CSVFormat.EXCEL.withDelimiter(';').withIgnoreEmptyLines().parse(inputReader)
+        loadNameList(StringReader(input))
+    }
+
+    fun loadNameList( reader: Reader) {
+        val records = CSVFormat.EXCEL.withDelimiter(';').withIgnoreEmptyLines().parse(reader)
         for (record in records) {
             fungi.add(Fungus(record[0], record[1]))
         }
