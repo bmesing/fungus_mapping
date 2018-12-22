@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.AutoCompleteTextView
 import de.mesing.pilzkartierung.domain.FungusNameSearch
-import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -47,17 +47,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // TODO: in background
-        val inputStream = resources.openRawResource(R.raw.mushroom_names)
+        loadSearchData()
+        initMap()
+        initNameInputField()
+    }
 
-        FungusNameSearch.loadNameList(InputStreamReader(inputStream))
+    private fun initNameInputField() {
+        val view = findViewById<AutoCompleteTextView>(R.id.fungus_input)
+        view.setAdapter(FungiSearchListAdapter(this, android.R.layout.simple_dropdown_item_1line))
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,  Manifest.permission.WRITE_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-            }
-        }
-
+    private fun initMap() {
         //load/initialize the osmdroid configuration, this can be done
         val ctx = applicationContext
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
@@ -75,13 +75,25 @@ class MainActivity : AppCompatActivity() {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-        fungus_input.addTextChangedListener(SearchTextChangedWatcher())
+        //fungus_input.addTextChangedListener(SearchTextChangedWatcher())
 
         val mapController = map.controller
         mapController.setZoom(12.0)
         // start at Rostock
         val startPoint = GeoPoint(54.0833, 12.133)
         mapController.setCenter(startPoint)
+    }
+
+    private fun loadSearchData() {
+        // TODO: in background
+        val inputStream = resources.openRawResource(R.raw.mushroom_names)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
+            }
+        }
+        FungusNameSearch.loadNameList(InputStreamReader(inputStream))
     }
 
     public override fun onResume() {

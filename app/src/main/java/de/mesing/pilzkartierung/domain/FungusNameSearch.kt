@@ -10,17 +10,17 @@ object FungusNameSearch {
 
     val fungi : MutableList<Fungus> = ArrayList()
 
-    fun findBySearchString(pattern: String) : Array<String> {
+    fun findBySearchString(pattern: String) : ArrayList<String> {
         val result = ArrayList<String>()
         if (pattern.isBlank()) {
-            return result.toTypedArray()
+            return result
         }
         for (fungus in fungi) {
             if (matches(fungus, pattern)) {
                 result.add(fungus.latinName())
             }
         }
-        return result.toTypedArray()
+        return result
     }
 
     private fun matches(fungus : Fungus, pattern : String) : Boolean {
