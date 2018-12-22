@@ -52,6 +52,6 @@ Agaricus;bitorquis;Stadtegerling, Stadtchampignon"""
 
     @Test
     fun findBySearchString() {
-        Assert.assertArrayEquals(expected, FungusNameSearch.findBySearchString(searchString))
+        Assert.assertArrayEquals(expected, FungusNameSearch.findBySearchString(searchString).toArray())
     }
 }
