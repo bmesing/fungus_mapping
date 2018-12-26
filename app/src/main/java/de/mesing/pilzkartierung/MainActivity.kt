@@ -11,14 +11,14 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.AutoCompleteTextView
 import de.mesing.pilzkartierung.domain.FungusNameSearch
+import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
 import java.io.InputStreamReader
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,8 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNameInputField() {
-        val view = findViewById<AutoCompleteTextView>(R.id.fungus_input)
-        view.setAdapter(FungiSearchListAdapter(this, android.R.layout.simple_dropdown_item_1line))
+        fungus_input.setAdapter(FungiSearchListAdapter(this, android.R.layout.simple_dropdown_item_1line))
     }
 
     private fun initMap() {
@@ -70,12 +69,12 @@ class MainActivity : AppCompatActivity() {
         //inflate and create the map
         setContentView(R.layout.activity_main)
 
-        map = findViewById(R.id.map)
+        map = map_view
         map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
+        map.zoomController.setZoomInEnabled(true)
+        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
+        map.setMultiTouchControls(true)
 
-        //fungus_input.addTextChangedListener(SearchTextChangedWatcher())
 
         val mapController = map.controller
         mapController.setZoom(12.0)

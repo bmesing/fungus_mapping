@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Pilzkartierung</string>
     <string name="fungus_name_latin">Pilzname (lateinisch)</string>
+    <string name="register_fungus">Pilzfund registrieren</string>
+    <string name="fungus_count_hint">Anzahl</string>
 </resources>
