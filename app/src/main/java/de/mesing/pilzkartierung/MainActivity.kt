@@ -8,9 +8,6 @@ import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import de.mesing.pilzkartierung.domain.FungusNameSearch
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.config.Configuration
@@ -28,21 +25,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var map: MapView
 
-     class SearchTextChangedWatcher : TextWatcher {
-         override fun afterTextChanged(s: Editable?) {
-
-         }
-
-         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-         }
-
-         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-             for (entry in FungusNameSearch.findBySearchString(s.toString()))
-                  Log.d("TAG", entry)
-         }
-
-     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         loadSearchData()
         initMap()
         initNameInputField()
+        initRegisterFungi()
     }
 
     private fun initNameInputField() {
@@ -81,6 +64,11 @@ class MainActivity : AppCompatActivity() {
         // start at Rostock
         val startPoint = GeoPoint(54.0833, 12.133)
         mapController.setCenter(startPoint)
+    }
+
+    private fun initRegisterFungi() {
+
+
     }
 
     private fun loadSearchData() {
