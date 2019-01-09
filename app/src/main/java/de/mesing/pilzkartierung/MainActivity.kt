@@ -8,6 +8,9 @@ import android.preference.PreferenceManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import de.mesing.pilzkartierung.domain.Fungus
+import de.mesing.pilzkartierung.domain.FungusDiscoveryRegistry
 import de.mesing.pilzkartierung.domain.FungusNameSearch
 import kotlinx.android.synthetic.main.activity_main.*
 import org.osmdroid.config.Configuration
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var map: MapView
 
+    // region lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,6 +39,26 @@ class MainActivity : AppCompatActivity() {
         initRegisterFungi()
     }
 
+    public override fun onResume() {
+        super.onResume()
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        map.onResume() //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+    public override fun onPause() {
+        super.onPause()
+        //this will refresh the osmdroid configuration on resuming.
+        //if you make changes to the configuration, use
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().save(this, prefs);
+        map.onPause()  //needed for compass, my location overlays, v6.0.0 and up
+    }
+    // endregion
+
+    // region initActivity
     private fun initNameInputField() {
         fungus_input.setAdapter(FungiSearchListAdapter(this, android.R.layout.simple_dropdown_item_1line))
     }
@@ -67,8 +91,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRegisterFungi() {
-
-
+        register_fungus_button.setOnClickListener { registerDiscovery() }
     }
 
     private fun loadSearchData() {
@@ -83,21 +106,41 @@ class MainActivity : AppCompatActivity() {
         FungusNameSearch.loadNameList(InputStreamReader(inputStream))
     }
 
-    public override fun onResume() {
-        super.onResume()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        map.onResume() //needed for compass, my location overlays, v6.0.0 and up
+    // endregion
+
+    private fun resetDiscoveryInput() {
+        fungus_input.text.clear()
+        fungus_number_input.text.clear()
     }
 
-    public override fun onPause() {
-        super.onPause()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        map.onPause()  //needed for compass, my location overlays, v6.0.0 and up
+
+    // region business Logic
+    private fun registerDiscovery() {
+        val discoveredFungus = getSelectedFungus()
+        if (discoveredFungus == null) {
+            Toast.makeText(this, "Kein Pilz ausgewählt", Toast.LENGTH_LONG).show()
+            return
+        }
+        val count = getDiscoveryCount()
+        val location = getDiscoveryLocation()
+        FungusDiscoveryRegistry.registerDiscovery(this, discoveredFungus, count, location)
+        Toast.makeText(this, "Plizfund registriert: ${count}x ${discoveredFungus.latinName()}", Toast.LENGTH_LONG).show()
+        resetDiscoveryInput()
+
     }
+
+    private fun getSelectedFungus() : Fungus? {
+        val fungusName = fungus_input.text.toString()
+        return FungusNameSearch.getFungusForLatinName(fungusName)
+    }
+
+    private fun getDiscoveryCount() : Int {
+        return fungus_number_input.text.toString().toIntOrNull() ?: 1
+    }
+
+    private fun getDiscoveryLocation() : GeoPoint {
+        return GeoPoint(54.0833, 12.133)
+    }
+    // endregion
+
 }

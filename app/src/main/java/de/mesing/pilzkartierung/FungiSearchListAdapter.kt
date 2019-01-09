@@ -7,7 +7,7 @@ import de.mesing.pilzkartierung.domain.FungusNameSearch
 
 class FungiSearchListAdapter(context: Context, textViewResourceId: Int) : ArrayAdapter<String>(context, textViewResourceId) {
 
-    private var suggestionList = ArrayList<String>()
+    private var suggestionList : List<String> = ArrayList()
 
     override fun getCount(): Int {
         return suggestionList.size

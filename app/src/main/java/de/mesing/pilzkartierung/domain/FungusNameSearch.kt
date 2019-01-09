@@ -8,31 +8,28 @@ import java.io.StringReader
 
 object FungusNameSearch {
 
-    val fungi : MutableList<Fungus> = ArrayList()
+    private val fungi : MutableList<Fungus> = ArrayList()
 
-    fun findBySearchString(pattern: String) : ArrayList<String> {
-        val result = ArrayList<String>()
-        if (pattern.isBlank()) {
-            return result
-        }
-        for (fungus in fungi) {
-            if (matches(fungus, pattern)) {
-                result.add(fungus.latinName())
-            }
-        }
-        return result
+    fun getFungusForLatinName(latinName : String) : Fungus? {
+        return fungi.firstOrNull{it.latinName() == latinName}
+    }
+
+    fun findBySearchString(pattern: String) : List<String> {
+        return fungi.filter{fungus -> matches(fungus, pattern)}
+                .map(Fungus::latinName)
     }
 
     private fun matches(fungus : Fungus, pattern : String) : Boolean {
+        if (pattern.isEmpty()) return false
         return matchesFullPattern(fungus, pattern) || matchesStartingChars(fungus, pattern)
     }
 
-    internal fun matchesFullPattern(fungus : Fungus, pattern : String) : Boolean {
+    private fun matchesFullPattern(fungus : Fungus, pattern : String) : Boolean {
         return fungus.genus.contains(pattern, true) || fungus.species.contains(pattern, true)
 
     }
 
-    internal fun matchesStartingChars(fungus : Fungus, pattern : String) : Boolean {
+    private fun matchesStartingChars(fungus : Fungus, pattern : String) : Boolean {
         val commonStart = StringUtils.getCommonStartIgnoringSpace(fungus.genus, pattern)
         val remainingPattern = pattern.substring(commonStart.length)
         // TODO: inefficient zweites contains
