@@ -18,6 +18,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var map: MapView
+    lateinit var myLocationOverlay: MyLocationNewOverlay
 
     // region lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,8 +88,27 @@ class MainActivity : AppCompatActivity() {
         val mapController = map.controller
         mapController.setZoom(12.0)
         // start at Rostock
-        val startPoint = GeoPoint(54.0833, 12.133)
+        val startPoint = GeoPoint(54.1833, 12.133)
         mapController.setCenter(startPoint)
+
+        myLocationOverlay = MyLocationNewOverlay(map)
+        map.overlays.add(myLocationOverlay)
+        map.postInvalidate()
+        myLocationOverlay.enableFollowLocation()
+
+        move_to_current_position_button.setOnClickListener { toggleFollowPosition() }
+    }
+
+    fun toggleFollowPosition() {
+        if (myLocationOverlay.isMyLocationEnabled) {
+            myLocationOverlay.disableFollowLocation()
+            Toast.makeText(this, "Folgemodus pausiert", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            myLocationOverlay.enableFollowLocation()
+            Toast.makeText(this, "Folge aktueller Position", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun initRegisterFungi() {
@@ -124,7 +145,7 @@ class MainActivity : AppCompatActivity() {
         val count = getDiscoveryCount()
         val location = getDiscoveryLocation()
         FungusDiscoveryRegistry.registerDiscovery(this, discoveredFungus, count, location)
-        Toast.makeText(this, "Plizfund registriert: ${count}x ${discoveredFungus.latinName()}", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Plizfund registriert: ${count}x ${discoveredFungus.latinName()} at lat: ${location.latitude}, long: ${location.longitude}", Toast.LENGTH_LONG).show()
         resetDiscoveryInput()
 
     }
@@ -139,7 +160,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDiscoveryLocation() : GeoPoint {
-        return GeoPoint(54.0833, 12.133)
+        val location = myLocationOverlay.lastFix
+
+        return GeoPoint(location.latitude, location.longitude)
     }
     // endregion
 
