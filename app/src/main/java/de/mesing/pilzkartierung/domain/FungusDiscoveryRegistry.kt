@@ -1,7 +1,7 @@
 package de.mesing.pilzkartierung.domain
 
 import android.content.Context
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import com.google.gson.Gson
 import org.osmdroid.util.GeoPoint
 import java.util.*
