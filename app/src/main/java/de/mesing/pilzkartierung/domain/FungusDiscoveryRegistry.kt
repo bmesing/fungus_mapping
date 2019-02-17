@@ -15,9 +15,6 @@ object FungusDiscoveryRegistry {
             val time: Date? = null
     )
 
-
-
-
     private const val DISCOVERY_LIST_KEY = "DISCOVERY_LIST_KEY"
 
     fun registerDiscovery(context: Context, fungus: Fungus, count: Int, position: GeoPoint) {
