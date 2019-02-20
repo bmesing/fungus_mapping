@@ -6,21 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import de.mesing.pilzkartierung.FungusApplication
 import de.mesing.pilzkartierung.R
 import de.mesing.pilzkartierung.domain.FungusDiscoveryRegistry
 import de.mesing.pilzkartierung.modules.fungi_discovery.FungiDiscoveryFragment.OnListFragmentInteractionListener
 import de.mesing.pilzkartierung.modules.fungi_discovery.dummy.DummyContent.DummyItem
-import kotlinx.android.synthetic.main.fragment_fungidiscovery.view.*
+import kotlinx.android.synthetic.main.view_fungidiscovery.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyFungiDiscoveryRecyclerViewAdapter(
+class FungiDiscoveryRecyclerViewAdapter(
         private val mValues: List<DummyItem>,
         private val mListener: OnListFragmentInteractionListener?)
-    : RecyclerView.Adapter<MyFungiDiscoveryRecyclerViewAdapter.ViewHolder>() {
+    : RecyclerView.Adapter<FungiDiscoveryRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
 
@@ -35,7 +36,7 @@ class MyFungiDiscoveryRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_fungidiscovery, parent, false)
+                .inflate(R.layout.view_fungidiscovery, parent, false)
         return ViewHolder(view)
     }
 
@@ -50,7 +51,7 @@ class MyFungiDiscoveryRecyclerViewAdapter(
         }
     }
 
-    override fun getItemCount(): Int = FungusDiscoveryRegistry.getDiscoveries()
+    override fun getItemCount(): Int = FungusDiscoveryRegistry.getDiscoveries(FungusApplication.context).size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mIdView: TextView = mView.item_number
