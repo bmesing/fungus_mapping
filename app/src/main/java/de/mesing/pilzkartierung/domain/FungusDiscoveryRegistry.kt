@@ -3,6 +3,7 @@ package de.mesing.pilzkartierung.domain
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.google.gson.Gson
+import de.mesing.pilzkartierung.FungusApplication
 import org.osmdroid.util.GeoPoint
 import java.util.*
 
@@ -27,8 +28,8 @@ object FungusDiscoveryRegistry {
                 .apply()
     }
 
-    fun getDiscoveries(context: Context) : List<FungusDiscovery> {
-        val prefs = SharedPreferencesAccess.getAppSharedPrefs(context)
+    fun getDiscoveries() : List<FungusDiscovery> {
+        val prefs = SharedPreferencesAccess.getAppSharedPrefs(FungusApplication.context)
         val sharedPrefsEntry = prefs.getString(DISCOVERY_LIST_KEY, null) ?: return emptyList()
         return sharedPrefsEntry.split(";").mapNotNull(this::toFungusDiscovery)
     }

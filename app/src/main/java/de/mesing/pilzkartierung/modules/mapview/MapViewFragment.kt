@@ -50,6 +50,7 @@ class MapViewFragment : Fragment() {
         initMap()
         initNameInputField()
         initRegisterFungi()
+        initFloatingActionButtons()
     }
 
     override fun onResume() {
@@ -103,8 +104,11 @@ class MapViewFragment : Fragment() {
         map.overlays.add(myLocationOverlay)
         map.postInvalidate()
         myLocationOverlay.enableFollowLocation()
+    }
 
+    private fun initFloatingActionButtons() {
         move_to_current_position_button.setOnClickListener { toggleFollowPosition() }
+        show_fungi_discovery_button.setOnClickListener{(activity as? MapViewFragment.Listener)?.onShowFungiDiscoveryFragment()}
     }
 
     fun toggleFollowPosition() {
@@ -172,4 +176,8 @@ class MapViewFragment : Fragment() {
         return GeoPoint(location.latitude, location.longitude)
     }
     // endregion
+
+    interface Listener {
+        fun onShowFungiDiscoveryFragment()
+    }
 }

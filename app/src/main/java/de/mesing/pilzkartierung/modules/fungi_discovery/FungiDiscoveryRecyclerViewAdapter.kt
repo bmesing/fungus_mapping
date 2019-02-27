@@ -1,6 +1,7 @@
 package de.mesing.pilzkartierung.modules.fungi_discovery
 
 
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,30 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import de.mesing.pilzkartierung.FungusApplication
 import de.mesing.pilzkartierung.R
 import de.mesing.pilzkartierung.domain.FungusDiscoveryRegistry
-import de.mesing.pilzkartierung.modules.fungi_discovery.FungiDiscoveryFragment.OnListFragmentInteractionListener
-import de.mesing.pilzkartierung.modules.fungi_discovery.dummy.DummyContent.DummyItem
 import kotlinx.android.synthetic.main.view_fungidiscovery.view.*
 
-/**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
- */
-class FungiDiscoveryRecyclerViewAdapter(
-        private val mValues: List<DummyItem>,
-        private val mListener: OnListFragmentInteractionListener?)
+class FungiDiscoveryRecyclerViewAdapter()
     : RecyclerView.Adapter<FungiDiscoveryRecyclerViewAdapter.ViewHolder>() {
 
-    private val mOnClickListener: View.OnClickListener
-
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
-        }
-    }
+    private val values: List<FungusDiscoveryRegistry.FungusDiscovery> = FungusDiscoveryRegistry.getDiscoveries()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -41,24 +24,17 @@ class FungiDiscoveryRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mValues[position]
-        holder.mIdView.text = item.id
-        holder.mContentView.text = item.content
-
-        with(holder.mView) {
-            tag = item
-            setOnClickListener(mOnClickListener)
-        }
+        val item = values[position]
+        holder.latinNameView.text = item.fungus.latinName()
+        holder.dateView.text = DateFormat.getDateFormat(FungusApplication.context).format(item.time)
+        holder.fungiCountView.text = item.count.toString()
     }
 
-    override fun getItemCount(): Int = FungusDiscoveryRegistry.getDiscoveries(FungusApplication.context).size
+    override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
-
-        override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
-        }
+        val latinNameView: TextView = mView.latin_name
+        val fungiCountView: TextView = mView.fungi_count
+        val dateView: TextView = mView.discovery_date
     }
 }
