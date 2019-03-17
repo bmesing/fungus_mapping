@@ -32,9 +32,9 @@ class FungiDiscoveryRecyclerViewAdapter()
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val latinNameView: TextView = mView.latin_name
-        val fungiCountView: TextView = mView.fungi_count
-        val dateView: TextView = mView.discovery_date
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val latinNameView: TextView = view.latin_name
+        val fungiCountView: TextView = view.fungi_count
+        val dateView: TextView = view.discovery_date
     }
 }

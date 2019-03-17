@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.mesing.pilzkartierung.R
 import kotlinx.android.synthetic.main.fragment_fungi_discovery.*
@@ -16,27 +15,21 @@ import kotlinx.android.synthetic.main.fragment_fungi_discovery.*
 */
 class FungiDiscoveryFragment : Fragment() {
 
-    // TODO: auf columnCount 3 umstellen und Adapter refactoren:
-    // https://stackoverflow.com/questions/40587168/simple-android-grid-example-using-recyclerview-with-gridlayoutmanager-like-the
-    private var columnCount = 1
-
     companion object {
         fun newInstance() : FungiDiscoveryFragment {
             return FungiDiscoveryFragment()
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_fungi_discovery, container, false)
-        with(list) {
-            layoutManager = when {
-                columnCount <= 1 -> LinearLayoutManager(context)
-                else -> GridLayoutManager(context, columnCount)
-            }
-            adapter = FungiDiscoveryRecyclerViewAdapter()
-        }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        list.layoutManager = LinearLayoutManager(context)
+        list.adapter = FungiDiscoveryRecyclerViewAdapter()
     }
 }
