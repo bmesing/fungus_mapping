@@ -36,6 +36,8 @@ class MapViewFragment : Fragment() {
         }
     }
 
+    val interactor = MapViewInteractor()
+
     lateinit var map: MapView
     lateinit var myLocationOverlay: MyLocationNewOverlay
 
@@ -146,36 +148,30 @@ class MapViewFragment : Fragment() {
     }
 
 
-    // region business Logic
     private fun registerDiscovery() {
-        val discoveredFungus = getSelectedFungus()
-        if (discoveredFungus == null) {
-            Toast.makeText(activity, "Kein Pilz ausgewählt", Toast.LENGTH_LONG).show()
-            return
+        val registrationResult = interactor.registerDiscovery(
+                fungusName = fungus_input.text.toString(),
+                countText = fungus_number_input.text.toString(),
+                locationProvider = myLocationOverlay,
+                context = requireActivity()
+        )
+        when (registrationResult.state) {
+            MapViewInteractor.DiscoveryRegistrationResult.State.NoFungusFound ->
+                Toast.makeText(activity, "Kein Pilz ausgewählt", Toast.LENGTH_LONG).show()
+            MapViewInteractor.DiscoveryRegistrationResult.State.NoPositionFix ->
+                Toast.makeText(activity, "Keine Position verfügbar", Toast.LENGTH_LONG).show()
+            MapViewInteractor.DiscoveryRegistrationResult.State.Success -> {
+                val discovery = registrationResult.discovery!!
+                Toast.makeText(
+                        activity,
+                        "Pilzfund registriert: ${discovery.count}x ${discovery.fungus.latinName()}\n" +
+                                "Position: lat: ${discovery.position.latitude}, long: ${discovery.position.longitude}",
+                        Toast.LENGTH_LONG
+                ).show()
+                resetDiscoveryInput()
+            }
         }
-        val count = getDiscoveryCount()
-        val location = getDiscoveryLocation()
-        FungusDiscoveryRegistry.registerDiscovery(requireActivity(), discoveredFungus, count, location)
-        Toast.makeText(activity, "Plizfund registriert: ${count}x ${discoveredFungus.latinName()} at lat: ${location.latitude}, long: ${location.longitude}", Toast.LENGTH_LONG).show()
-        resetDiscoveryInput()
-
     }
-
-    private fun getSelectedFungus() : Fungus? {
-        val fungusName = fungus_input.text.toString()
-        return FungusNameSearch.getFungusForLatinName(fungusName)
-    }
-
-    private fun getDiscoveryCount() : Int {
-        return fungus_number_input.text.toString().toIntOrNull() ?: 1
-    }
-
-    private fun getDiscoveryLocation() : GeoPoint {
-        val location = myLocationOverlay.lastFix
-
-        return GeoPoint(location.latitude, location.longitude)
-    }
-    // endregion
 
     interface Listener {
         fun onShowFungiDiscoveryFragment()

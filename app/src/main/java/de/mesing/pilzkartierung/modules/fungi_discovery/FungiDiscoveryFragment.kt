@@ -15,6 +15,8 @@ import kotlinx.android.synthetic.main.fragment_fungi_discovery.*
 */
 class FungiDiscoveryFragment : Fragment() {
 
+    val interactor = FungiDiscoveryInteractor()
+
     companion object {
         fun newInstance() : FungiDiscoveryFragment {
             return FungiDiscoveryFragment()
