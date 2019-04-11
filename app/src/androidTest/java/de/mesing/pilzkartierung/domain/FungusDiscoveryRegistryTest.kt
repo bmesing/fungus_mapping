@@ -19,7 +19,7 @@ class FungusDiscoveryRegistryTest {
 
     @Test
     fun readEmptyDiscoveryList() {
-        val result = FungusDiscoveryRegistry.getDiscoveries(context)
+        val result = FungusDiscoveryRegistry.getDiscoveries()
         Assert.assertEquals(0, result.size)
     }
 
@@ -33,7 +33,7 @@ class FungusDiscoveryRegistryTest {
                 GeoPoint(54.0833, 12.133)
 
         )
-        val result = FungusDiscoveryRegistry.getDiscoveries(context)
+        val result = FungusDiscoveryRegistry.getDiscoveries()
         Assert.assertEquals(1, result.size)
         Assert.assertEquals(result[0].fungus, Fungus("Agaricus", "arvensis"))
         Assert.assertEquals(result[0].count, 3)
@@ -56,7 +56,7 @@ class FungusDiscoveryRegistryTest {
 
         )
 
-        val result = FungusDiscoveryRegistry.getDiscoveries(context)
+        val result = FungusDiscoveryRegistry.getDiscoveries()
         Assert.assertEquals(2, result.size)
         Assert.assertEquals(result[0].count, 3)
         Assert.assertEquals(result[1].count, 1)
@@ -72,7 +72,7 @@ class FungusDiscoveryRegistryTest {
 
         )
         FungusDiscoveryRegistry.clearDiscoveries(context)
-        val result = FungusDiscoveryRegistry.getDiscoveries(context)
+        val result = FungusDiscoveryRegistry.getDiscoveries()
         Assert.assertEquals(0, result.size)
     }
 
