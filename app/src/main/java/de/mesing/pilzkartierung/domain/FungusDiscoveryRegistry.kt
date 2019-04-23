@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting
 import com.google.gson.Gson
 import de.mesing.pilzkartierung.FungusApplication
 import org.osmdroid.util.GeoPoint
-import java.util.*
+import java.time.LocalDate
 
 object FungusDiscoveryRegistry {
 
@@ -13,7 +13,7 @@ object FungusDiscoveryRegistry {
             val fungus: Fungus,
             val count: Int,
             val position: GeoPoint,
-            val time: Date? = null
+            val time: LocalDate? = null
     )
 
     private const val DISCOVERY_LIST_KEY = "DISCOVERY_LIST_KEY"
@@ -21,7 +21,7 @@ object FungusDiscoveryRegistry {
     fun registerDiscovery(context: Context, fungus: Fungus, count: Int, position: GeoPoint): FungusDiscovery {
         val prefs = SharedPreferencesAccess.getAppSharedPrefs(context)
         val oldString = prefs.getString(DISCOVERY_LIST_KEY, "")
-        val fungusDiscovery = FungusDiscovery(fungus, count, position, Date())
+        val fungusDiscovery = FungusDiscovery(fungus, count, position, LocalDate.now())
         val entry = createFungusListEntry(fungusDiscovery)
         val newString = oldString?.let { "$oldString;$entry" } ?: entry
         prefs.edit()
