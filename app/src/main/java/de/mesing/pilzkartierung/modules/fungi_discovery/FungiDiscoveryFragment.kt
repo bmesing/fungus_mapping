@@ -33,5 +33,8 @@ class FungiDiscoveryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = FungiDiscoveryRecyclerViewAdapter()
+        share_button.setOnClickListener {
+            interactor.shareDiscoveryList(requireContext())
+        }
     }
 }
