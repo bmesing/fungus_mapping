@@ -1,9 +1,8 @@
 package de.mesing.pilzkartierung.domain
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
-import com.google.gson.Gson
 import de.mesing.pilzkartierung.FungusApplication
+import de.mesing.pilzkartierung.util.gson.GsonUtils
 import org.osmdroid.util.GeoPoint
 import java.time.LocalDate
 
@@ -18,12 +17,12 @@ object FungusDiscoveryRegistry {
 
     private const val DISCOVERY_LIST_KEY = "DISCOVERY_LIST_KEY"
 
-    fun registerDiscovery(context: Context, fungus: Fungus, count: Int, position: GeoPoint): FungusDiscovery {
-        val prefs = SharedPreferencesAccess.getAppSharedPrefs(context)
+    fun registerDiscovery(fungus: Fungus, count: Int, position: GeoPoint): FungusDiscovery {
+        val prefs = SharedPreferencesAccess.getAppSharedPrefs(FungusApplication.context)
         val oldString = prefs.getString(DISCOVERY_LIST_KEY, "")
         val fungusDiscovery = FungusDiscovery(fungus, count, position, LocalDate.now())
         val entry = createFungusListEntry(fungusDiscovery)
-        val newString = oldString?.let { "$oldString;$entry" } ?: entry
+        val newString = if (!oldString.isNullOrBlank()) "$oldString;$entry" else entry
         prefs.edit()
                 .putString(DISCOVERY_LIST_KEY, newString)
                 .apply()
@@ -33,23 +32,23 @@ object FungusDiscoveryRegistry {
     fun getDiscoveries() : List<FungusDiscovery> {
         val prefs = SharedPreferencesAccess.getAppSharedPrefs(FungusApplication.context)
         val sharedPrefsEntry = prefs.getString(DISCOVERY_LIST_KEY, null) ?: return emptyList()
-        return sharedPrefsEntry.split(";").mapNotNull(this::toFungusDiscovery)
+        return sharedPrefsEntry.split(";").filterNot{ it.isBlank() }.mapNotNull(this::toFungusDiscovery)
     }
 
     @VisibleForTesting
     fun createFungusListEntry(fungusDiscovery: FungusDiscovery) : String {
 
-        return Gson().toJson(fungusDiscovery)
+        return GsonUtils.gson.toJson(fungusDiscovery)
     }
 
     private fun toFungusDiscovery(json: String?) : FungusDiscovery? {
-        return Gson().fromJson(json, FungusDiscovery::class.java)
+        if (json.isNullOrBlank())
+                return null;
+        return GsonUtils.gson.fromJson(json, FungusDiscovery::class.java)
     }
 
-    fun clearDiscoveries(context: Context) {
-        val prefs = SharedPreferencesAccess.getAppSharedPrefs(context)
+    fun clearDiscoveries() {
+        val prefs = SharedPreferencesAccess.getAppSharedPrefs(FungusApplication.context)
         prefs.edit().putString(DISCOVERY_LIST_KEY, null).apply()
     }
-
-
 }

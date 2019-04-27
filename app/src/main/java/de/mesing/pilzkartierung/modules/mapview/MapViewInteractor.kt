@@ -26,7 +26,7 @@ class MapViewInteractor {
         val count = getDiscoveryCount(countText)
         val location = getDiscoveryLocation(locationProvider)
                 ?: return DiscoveryRegistrationResult(DiscoveryRegistrationResult.State.NoPositionFix)
-        val discovery = FungusDiscoveryRegistry.registerDiscovery(context, discoveredFungus, count, location)
+        val discovery = FungusDiscoveryRegistry.registerDiscovery(discoveredFungus, count, location)
         return DiscoveryRegistrationResult(DiscoveryRegistrationResult.State.Success, discovery)
     }
 

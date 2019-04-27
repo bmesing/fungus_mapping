@@ -1,7 +1,5 @@
 package de.mesing.pilzkartierung.domain
 
-import android.content.Context
-import androidx.test.InstrumentationRegistry
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -9,12 +7,9 @@ import org.osmdroid.util.GeoPoint
 
 class FungusDiscoveryRegistryTest {
 
-    lateinit var context: Context
-
     @Before
     fun setUp() {
-        context = InstrumentationRegistry.getContext()
-        FungusDiscoveryRegistry.clearDiscoveries(context)
+        FungusDiscoveryRegistry.clearDiscoveries()
     }
 
     @Test
@@ -27,7 +22,6 @@ class FungusDiscoveryRegistryTest {
     @Test
     fun registerAndReadSingleDiscovery() {
         FungusDiscoveryRegistry.registerDiscovery(
-                context,
                 Fungus("Agaricus", "arvensis"),
                 3,
                 GeoPoint(54.0833, 12.133)
@@ -42,14 +36,12 @@ class FungusDiscoveryRegistryTest {
     @Test
     fun registerAndReadMultipleDiscoveries() {
         FungusDiscoveryRegistry.registerDiscovery(
-                context,
                 Fungus("Agaricus", "arvensis"),
                 3,
                 GeoPoint(54.0833, 12.133)
 
         )
         FungusDiscoveryRegistry.registerDiscovery(
-                context,
                 Fungus("Agaricus", "bitorquis"),
                 1,
                 GeoPoint(55.0833, 11.133)
@@ -65,13 +57,12 @@ class FungusDiscoveryRegistryTest {
     @Test
     fun clearList() {
         FungusDiscoveryRegistry.registerDiscovery(
-                context,
                 Fungus("Agaricus", "arvensis"),
                 3,
                 GeoPoint(54.0833, 12.133)
 
         )
-        FungusDiscoveryRegistry.clearDiscoveries(context)
+        FungusDiscoveryRegistry.clearDiscoveries()
         val result = FungusDiscoveryRegistry.getDiscoveries()
         Assert.assertEquals(0, result.size)
     }
