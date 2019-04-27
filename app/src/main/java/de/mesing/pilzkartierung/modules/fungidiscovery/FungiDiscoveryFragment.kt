@@ -1,4 +1,4 @@
-package de.mesing.pilzkartierung.modules.fungi_discovery
+package de.mesing.pilzkartierung.modules.fungidiscovery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_fungi_discovery.*
 class FungiDiscoveryFragment : Fragment() {
 
     private val interactor = FungiDiscoveryInteractor()
-    lateinit var adapter : FungiDiscoveryRecyclerViewAdapter
+    private lateinit var adapter : FungiDiscoveryRecyclerViewAdapter
 
     companion object {
         fun newInstance() : FungiDiscoveryFragment {

@@ -43,7 +43,7 @@ object FungusDiscoveryRegistry {
 
     private fun toFungusDiscovery(json: String?) : FungusDiscovery? {
         if (json.isNullOrBlank())
-                return null;
+                return null
         return GsonUtils.gson.fromJson(json, FungusDiscovery::class.java)
     }
 

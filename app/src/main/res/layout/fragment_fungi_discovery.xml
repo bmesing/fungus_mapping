@@ -15,8 +15,8 @@
                                                android:layout_marginLeft="16dp"
                                                android:layout_marginRight="16dp"
                                                android:layout_weight="1"
-                                               app:layoutManager="LinearLayoutManager"
-                                               tools:context=".modules.fungi_discovery.FungiDiscoveryFragment"
+                                               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                               tools:context=".modules.fungidiscovery.FungiDiscoveryFragment"
                                                tools:listitem="@layout/view_fungidiscovery"/>
     <View
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/footer"
-        >
+        android:baselineAligned="false">
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

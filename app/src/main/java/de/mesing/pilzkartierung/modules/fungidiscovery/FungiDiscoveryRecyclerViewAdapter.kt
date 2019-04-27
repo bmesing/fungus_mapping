@@ -1,4 +1,4 @@
-package de.mesing.pilzkartierung.modules.fungi_discovery
+package de.mesing.pilzkartierung.modules.fungidiscovery
 
 
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import de.mesing.pilzkartierung.R
 import de.mesing.pilzkartierung.domain.FungusDiscoveryRegistry
 import kotlinx.android.synthetic.main.view_fungidiscovery.view.*
 
-class FungiDiscoveryRecyclerViewAdapter()
+class FungiDiscoveryRecyclerViewAdapter
     : RecyclerView.Adapter<FungiDiscoveryRecyclerViewAdapter.ViewHolder>() {
 
     private var values: List<FungusDiscoveryRegistry.FungusDiscovery> = FungusDiscoveryRegistry.getDiscoveries()

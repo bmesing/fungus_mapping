@@ -13,7 +13,7 @@ object FungusDiscoveryCsvSerializer {
     }
 
     fun toCsv(discovery: FungusDiscoveryRegistry.FungusDiscovery) : String {
-        val fields = Array<String>(5)  { "" }
+        val fields = Array(5)  { "" }
         var index = 0
         fields[index++] = "${discovery.fungus.genus} ${discovery.fungus.species}"
         fields[index++] = discovery.count.toString()

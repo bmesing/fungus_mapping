@@ -10,12 +10,12 @@ import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
 class FungusNameSearchTest (
-        val searchString : String,
-        val expected: Array<String>
+        private val searchString : String,
+        private val expected: Array<String>
 )
 {
 
-    val data = """Agaricus;arvensis;Schafegerling
+    private val data = """Agaricus;arvensis;Schafegerling
 Agaricus;augustus;Riesen-Champignon, Braunschuppiger R.
 Agaricus;benesii;Weißschuppiger Blutegerling
 Agaricus;bernardii;Salzwiesen-Egerling

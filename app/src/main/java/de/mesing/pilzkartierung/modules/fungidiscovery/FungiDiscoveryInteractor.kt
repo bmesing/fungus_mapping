@@ -1,4 +1,4 @@
-package de.mesing.pilzkartierung.modules.fungi_discovery
+package de.mesing.pilzkartierung.modules.fungidiscovery
 
 import android.content.Context
 import android.content.Intent

@@ -2,7 +2,6 @@ package de.mesing.pilzkartierung.modules.mapview
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -14,8 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import de.mesing.pilzkartierung.FungiSearchListAdapter
 import de.mesing.pilzkartierung.R
-import de.mesing.pilzkartierung.domain.Fungus
-import de.mesing.pilzkartierung.domain.FungusDiscoveryRegistry
 import de.mesing.pilzkartierung.domain.FungusNameSearch
 import kotlinx.android.synthetic.main.fragment_map_view.*
 import org.osmdroid.config.Configuration
@@ -36,10 +33,10 @@ class MapViewFragment : Fragment() {
         }
     }
 
-    val interactor = MapViewInteractor()
+    private val interactor = MapViewInteractor()
 
-    lateinit var map: MapView
-    lateinit var myLocationOverlay: MyLocationNewOverlay
+    private lateinit var map: MapView
+    private lateinit var myLocationOverlay: MyLocationNewOverlay
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_map_view, container, false)
@@ -113,7 +110,7 @@ class MapViewFragment : Fragment() {
         show_fungi_discovery_button.setOnClickListener{(activity as? MapViewFragment.Listener)?.onShowFungiDiscoveryFragment()}
     }
 
-    fun toggleFollowPosition() {
+    private fun toggleFollowPosition() {
         if (myLocationOverlay.isFollowLocationEnabled) {
             myLocationOverlay.disableFollowLocation()
             Toast.makeText(activity, "Folgemodus pausiert", Toast.LENGTH_SHORT).show()
@@ -132,10 +129,8 @@ class MapViewFragment : Fragment() {
         // TODO: in background
         val inputStream = resources.openRawResource(R.raw.mushroom_names)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-            }
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
         }
         FungusNameSearch.loadNameList(InputStreamReader(inputStream))
     }

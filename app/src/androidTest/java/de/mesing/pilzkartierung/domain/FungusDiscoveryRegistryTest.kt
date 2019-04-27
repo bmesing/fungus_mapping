@@ -4,6 +4,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.osmdroid.util.GeoPoint
+import java.time.LocalDate
 
 class FungusDiscoveryRegistryTest {
 
@@ -21,6 +22,7 @@ class FungusDiscoveryRegistryTest {
 
     @Test
     fun registerAndReadSingleDiscovery() {
+        val today = LocalDate.now()
         FungusDiscoveryRegistry.registerDiscovery(
                 Fungus("Agaricus", "arvensis"),
                 3,
@@ -31,8 +33,8 @@ class FungusDiscoveryRegistryTest {
         Assert.assertEquals(1, result.size)
         Assert.assertEquals(result[0].fungus, Fungus("Agaricus", "arvensis"))
         Assert.assertEquals(result[0].count, 3)
-        Assert.assertEquals(discovery.time!!.dayOfMonth, result[0].time!!.dayOfMonth)
-        Assert.assertEquals(discovery.time!!.year, result[0].time!!.year)
+        Assert.assertEquals(today.dayOfMonth, result[0].time!!.dayOfMonth)
+        Assert.assertEquals(today.year, result[0].time!!.year)
     }
 
     @Test

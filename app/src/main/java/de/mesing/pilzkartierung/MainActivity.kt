@@ -2,7 +2,7 @@ package de.mesing.pilzkartierung
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import de.mesing.pilzkartierung.modules.fungi_discovery.FungiDiscoveryFragment
+import de.mesing.pilzkartierung.modules.fungidiscovery.FungiDiscoveryFragment
 import de.mesing.pilzkartierung.modules.mapview.MapViewFragment
 
 class MainActivity : AppCompatActivity(), MapViewFragment.Listener {

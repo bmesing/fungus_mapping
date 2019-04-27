@@ -7,9 +7,9 @@ import org.junit.runners.Parameterized
 
 
 @RunWith(Parameterized::class)
-class StringUtilsTest(val expected : String,
-                      val input1 : String,
-                      val input2 : String) {
+class StringUtilsTest(private val expected : String,
+                      private val input1 : String,
+                      private val input2 : String) {
 
 
     companion object {
