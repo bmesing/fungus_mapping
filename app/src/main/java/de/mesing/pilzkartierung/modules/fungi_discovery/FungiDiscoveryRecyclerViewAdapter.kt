@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.view_fungidiscovery.view.*
 class FungiDiscoveryRecyclerViewAdapter()
     : RecyclerView.Adapter<FungiDiscoveryRecyclerViewAdapter.ViewHolder>() {
 
-    private val values: List<FungusDiscoveryRegistry.FungusDiscovery> = FungusDiscoveryRegistry.getDiscoveries()
+    private var values: List<FungusDiscoveryRegistry.FungusDiscovery> = FungusDiscoveryRegistry.getDiscoveries()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -29,6 +29,11 @@ class FungiDiscoveryRecyclerViewAdapter()
     }
 
     override fun getItemCount(): Int = values.size
+
+    fun reloadDiscoveryList() {
+        values = FungusDiscoveryRegistry.getDiscoveries()
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val latinNameView: TextView = view.latin_name

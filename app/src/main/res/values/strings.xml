@@ -1,7 +1,10 @@
 <resources>
+    <string name="cancel">Abbrechen</string>
     <string name="app_name">Pilzkartierung</string>
     <string name="fungus_name_latin">Pilzname (lateinisch)</string>
     <string name="register_fungus">Pilzfund registrieren</string>
     <string name="fungus_count_hint">Anzahl</string>
     <string name="fundliste">Fundliste</string>
+    <string name="confirm_delete_dialog_text">Möchten Sie wirklich die komplette Fundliste löschen?</string>
+    <string name="confirm_delete_positive_button_text">Liste Löschen</string>
 </resources>

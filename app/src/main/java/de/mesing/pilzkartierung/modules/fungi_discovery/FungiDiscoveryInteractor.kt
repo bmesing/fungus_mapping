@@ -16,4 +16,8 @@ class FungiDiscoveryInteractor {
         }
         context.startActivity(sendIntent)
     }
+
+    fun deleteDiscoveryList() {
+        FungusDiscoveryRegistry.clearDiscoveries()
+    }
 }
