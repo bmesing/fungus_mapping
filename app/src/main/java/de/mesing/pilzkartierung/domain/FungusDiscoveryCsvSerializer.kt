@@ -7,7 +7,7 @@ object FungusDiscoveryCsvSerializer {
     fun toCsv(discoveries: List<FungusDiscoveryRegistry.FungusDiscovery>) : String {
         val result = StringBuilder()
         discoveries.forEach {
-            result.append(toCsv(it))
+            result.append(toCsv(it)).append("\n")
         }
         return result.toString()
     }

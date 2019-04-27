@@ -31,6 +31,8 @@ class FungusDiscoveryRegistryTest {
         Assert.assertEquals(1, result.size)
         Assert.assertEquals(result[0].fungus, Fungus("Agaricus", "arvensis"))
         Assert.assertEquals(result[0].count, 3)
+        Assert.assertEquals(discovery.time!!.dayOfMonth, result[0].time!!.dayOfMonth)
+        Assert.assertEquals(discovery.time!!.year, result[0].time!!.year)
     }
 
     @Test
