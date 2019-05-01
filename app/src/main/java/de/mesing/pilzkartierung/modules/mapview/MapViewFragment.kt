@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.InputStreamReader
 
@@ -37,6 +40,7 @@ class MapViewFragment : Fragment() {
 
     private lateinit var map: MapView
     private lateinit var myLocationOverlay: MyLocationNewOverlay
+    private lateinit var discoveryOverlay : ItemizedIconOverlay<OverlayItem>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_map_view, container, false)
@@ -47,6 +51,7 @@ class MapViewFragment : Fragment() {
 
         loadSearchData()
         initMap()
+        initDiscoveryOverlay()
         initNameInputField()
         initRegisterFungi()
         initFloatingActionButtons()
@@ -94,7 +99,7 @@ class MapViewFragment : Fragment() {
 
 
         val mapController = map.controller
-        mapController.setZoom(12.0)
+        mapController.zoomTo(15.0)
         // start at Rostock
         val startPoint = GeoPoint(54.1833, 12.133)
         mapController.setCenter(startPoint)
@@ -103,6 +108,26 @@ class MapViewFragment : Fragment() {
         map.overlays.add(myLocationOverlay)
         map.postInvalidate()
         myLocationOverlay.enableFollowLocation()
+    }
+
+    private fun initDiscoveryOverlay() {
+        Log.d(MapViewFragment::class.simpleName, "initDiscoveryOverlay")
+        discoveryOverlay = ItemizedIconOverlay<OverlayItem>(
+                requireContext(),
+                interactor.getDiscoveryOverlayItems(),
+                object : org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+                    override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
+                        return false;
+                    }
+
+                    override fun onItemSingleTapUp(index: Int, item: OverlayItem?): Boolean {
+                        return false;
+                    }
+                }
+        )
+        map.overlays.add(discoveryOverlay)
+        map.postInvalidate()
+
     }
 
     private fun initFloatingActionButtons() {
@@ -163,6 +188,7 @@ class MapViewFragment : Fragment() {
                                 "Position: lat: ${discovery.position.latitude}, long: ${discovery.position.longitude}",
                         Toast.LENGTH_LONG
                 ).show()
+                discoveryOverlay.addItem(interactor.mapToOverlayItem(discovery))
                 resetDiscoveryInput()
             }
         }

@@ -4,6 +4,7 @@ import android.content.Context
 import de.mesing.pilzkartierung.domain.FungusDiscoveryRegistry
 import de.mesing.pilzkartierung.domain.FungusNameSearch
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 class MapViewInteractor {
@@ -37,5 +38,17 @@ class MapViewInteractor {
     private fun getDiscoveryLocation(locationProvider: MyLocationNewOverlay) : GeoPoint? {
         val location = locationProvider.lastFix
         return GeoPoint(location.latitude, location.longitude)
+    }
+
+    fun getDiscoveryOverlayItems() : List<OverlayItem> {
+        return FungusDiscoveryRegistry.getDiscoveries().map(this::mapToOverlayItem)
+    }
+
+    fun mapToOverlayItem(discovery: FungusDiscoveryRegistry.FungusDiscovery) : OverlayItem {
+        return OverlayItem(
+                discovery.fungus.latinName(),
+                null,
+                discovery.position
+        )
     }
 }
