@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 
 internal class LocalDateAdapter : JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): LocalDate {
-        return LocalDate.parse((json as JsonPrimitive).asString)
+        return LocalDate.parse(json?.asString)
     }
 
     override fun serialize(date: LocalDate, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
